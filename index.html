@@ -9,7 +9,7 @@
 *{box-sizing:border-box}body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:var(--bg);color:var(--text)}
 .wrap{max-width:1180px;margin:0 auto;padding:32px 18px 60px}
 .hero{background:linear-gradient(135deg,var(--dark),var(--blue));color:#fff;padding:28px 32px;border-radius:22px;margin-bottom:22px}
-.hero-brand{display:flex;align-items:center;gap:16px}.mg-logo-wrap{width:64px;height:64px;flex:0 0 64px;background:#fff;border-radius:14px;padding:7px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.12)}.mg-logo{width:100%;height:100%;object-fit:contain;display:block}.hero h1{margin:0 0 8px;font-size:30px}.hero p{margin:0;opacity:.8}
+.hero-brand{display:flex;align-items:center;gap:16px}.hero-main{display:flex;align-items:center;gap:16px;min-width:0}.hero-actions{margin-left:auto}.faq-link{border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 16px;border:1px solid rgba(255,255,255,.45);border-radius:12px;background:rgba(255,255,255,.12);color:#fff;text-decoration:none;font-size:14px;font-weight:800;white-space:nowrap;transition:.2s ease}.faq-link:hover{background:#fff;color:var(--dark);transform:translateY(-1px)}.faq-link:focus-visible{outline:3px solid rgba(255,255,255,.55);outline-offset:3px}.mg-logo-wrap{width:64px;height:64px;flex:0 0 64px;background:#fff;border-radius:14px;padding:7px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.12)}.mg-logo{width:100%;height:100%;object-fit:contain;display:block}.hero h1{margin:0 0 8px;font-size:30px}.hero p{margin:0;opacity:.8}
 .grid{display:grid;grid-template-columns:390px 1fr;gap:22px}
 .card{background:#fff;border-radius:18px;padding:24px;border:1px solid #edf1f5;box-shadow:0 12px 30px rgba(16,45,82,.08)}
 label{font-weight:700;font-size:14px}.group{margin-bottom:22px}
@@ -26,23 +26,31 @@ input[type=range]{width:100%;accent-color:var(--blue);margin-top:10px}
 .box .k{font-size:12px;color:var(--sub)}.box.primary .k{color:#dce8f8}.box .v{font-size:24px;font-weight:800;margin-top:5px}
 .tablewrap{overflow:auto;border:1px solid #e5eaf0;border-radius:12px}table{border-collapse:collapse;width:100%;min-width:700px}th,td{padding:11px;border-bottom:1px solid #eef1f4;text-align:right;font-size:13px}th{background:#f7f9fc}th:first-child,td:first-child{text-align:center}
 .note{font-size:12px;color:var(--sub);margin-top:16px;line-height:1.6}
-@media(max-width:900px){.grid{grid-template-columns:1fr}.summary{grid-template-columns:1fr}}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.summary{grid-template-columns:1fr}.hero-brand{align-items:stretch;flex-direction:column}.hero-actions{margin-left:0}.faq-link{width:100%}}
+@media(max-width:560px){.hero{padding:22px 18px}.hero-main{align-items:flex-start}.mg-logo-wrap{width:54px;height:54px;flex-basis:54px}.hero h1{font-size:24px}.hero p{font-size:13px}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <section class="hero">
     <div class="hero-brand">
-      <div class="mg-logo-wrap">
-        <img
-          class="mg-logo"
-          src="https://www.kfcc.co.kr/static/images/content/cc/img_ci01.jpg"
-          alt="MG새마을금고 공식 심볼마크"
-        />
+      <div class="hero-main">
+        <div class="mg-logo-wrap">
+          <img
+            class="mg-logo"
+            src="https://www.kfcc.co.kr/static/images/content/cc/img_ci01.jpg"
+            alt="MG새마을금고 공식 심볼마크"
+          />
+        </div>
+        <div>
+          <h1>MG 맞춤형 대출 상환 계산기</h1>
+          <p>예상 상환금액과 월별 상환계획을 간편하게 확인하세요.</p>
+        </div>
       </div>
-      <div>
-        <h1>MG 맞춤형 대출 상환 계산기</h1>
-        <p>예상 상환금액과 월별 상환계획을 간편하게 확인하세요.</p>
+      <div class="hero-actions">
+        <a class="faq-link" href="./FAQ.html" aria-label="업무 FAQ 검색 페이지로 이동">
+          <span aria-hidden="true"></span> 업무 FAQ
+        </button>
       </div>
     </div>
   </section>
