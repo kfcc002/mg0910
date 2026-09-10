@@ -1,211 +1,150 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>업무 FAQ 검색</title>
-  <style>
-    :root{
-      --primary:#1f5fa8;--primary-dark:#16497f;--primary-soft:#edf5ff;
-      --bg:#f5f7fb;--card:#fff;--text:#172033;--sub:#667085;
-      --line:#e4e9f0;--highlight:#fff2a8;--warning:#fff8eb;
-      --warning-line:#f1d28b;--shadow:0 12px 32px rgba(30,60,100,.08)
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Pretendard,"Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
-    button,input{font:inherit}
-    .app{width:min(1120px,calc(100% - 32px));margin:0 auto;padding:42px 0 64px}
-    .hero{margin-bottom:24px}
-    .eyebrow{display:inline-flex;padding:6px 10px;border-radius:999px;background:var(--primary-soft);color:var(--primary-dark);font-size:12px;font-weight:800;margin-bottom:10px}
-    h1{margin:0;font-size:clamp(28px,4vw,40px);letter-spacing:-.04em}
-    .hero p{margin:8px 0 0;color:var(--sub);font-size:15px}
-    .panel{background:var(--card);border:1px solid #edf0f4;border-radius:18px;box-shadow:var(--shadow)}
-    .search-panel,.results-panel{padding:24px}
-    .search-panel{margin-bottom:20px}
-    .search-row{display:grid;grid-template-columns:1fr auto;gap:10px}
-    .search-box{position:relative}
-    .search-box input{width:100%;height:54px;border:1px solid var(--line);border-radius:14px;padding:0 48px 0 16px;outline:none}
-    .search-box input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(31,95,168,.08)}
-    .search-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--sub);font-size:20px}
-    .reset-btn{height:54px;border:0;border-radius:14px;padding:0 20px;background:var(--primary);color:#fff;font-weight:800;cursor:pointer}
-    .reset-btn:hover{background:var(--primary-dark)}
-    .filter-wrap{margin-top:18px}
-    .filter-label{display:block;margin-bottom:9px;font-size:13px;font-weight:800;color:#475467}
-    .filters{display:flex;flex-wrap:wrap;gap:8px}
-    .filter-btn{border:1px solid var(--line);border-radius:999px;background:#fff;color:#344054;padding:9px 16px;font-weight:700;font-size:14px;cursor:pointer}
-    .filter-btn:hover{background:var(--primary-soft);border-color:#bcd3ee}
-    .filter-btn.active{background:var(--primary);border-color:var(--primary);color:#fff}
-    .results-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}
-    .results-head h2{margin:0;font-size:20px}
-    .count{color:var(--sub);font-size:14px}.count strong{color:var(--primary-dark)}
-    .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
-    table{width:100%;min-width:760px;border-collapse:collapse;background:#fff}
-    th,td{padding:16px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
-    th{background:#f8fafc;color:#475467;font-size:13px;font-weight:800}
-    td{font-size:14px}tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#fbfdff}
-    .question{font-weight:800;color:#1d2939}.answer{color:#344054}
-    .category-badge{display:inline-flex;padding:5px 10px;border-radius:999px;background:var(--primary-soft);color:var(--primary-dark);font-size:12px;font-weight:800;white-space:nowrap}
-    mark{background:var(--highlight);color:inherit;padding:0 2px;border-radius:3px}
-    .empty{display:none;padding:36px 24px;text-align:center;border:1px solid var(--warning-line);border-radius:14px;background:var(--warning);color:#7a5613}
-    .empty strong{display:block;margin-bottom:6px;font-size:17px;color:#5f4310}
-    .footnote{margin-top:14px;color:var(--sub);font-size:12px}
-    @media(max-width:720px){.app{width:min(100% - 20px,1120px);padding-top:24px}.search-panel,.results-panel{padding:18px}.search-row{grid-template-columns:1fr}.reset-btn{width:100%}.results-head{align-items:flex-start;flex-direction:column}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MG 맞춤형 대출 상환 계산기</title>
+<style>
+:root{--blue:#1458a6;--dark:#0b3f7d;--light:#eaf3ff;--bg:#f4f7fb;--text:#172033;--sub:#667085;--border:#d9e2ec}
+*{box-sizing:border-box}body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 18px 60px}
+.hero{background:linear-gradient(135deg,var(--dark),var(--blue));color:#fff;padding:28px 32px;border-radius:22px;margin-bottom:22px}
+.hero-brand{display:flex;align-items:center;gap:16px}.mg-logo-wrap{width:64px;height:64px;flex:0 0 64px;background:#fff;border-radius:14px;padding:7px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.12)}.mg-logo{width:100%;height:100%;object-fit:contain;display:block}.hero h1{margin:0 0 8px;font-size:30px}.hero p{margin:0;opacity:.8}
+.grid{display:grid;grid-template-columns:390px 1fr;gap:22px}
+.card{background:#fff;border-radius:18px;padding:24px;border:1px solid #edf1f5;box-shadow:0 12px 30px rgba(16,45,82,.08)}
+label{font-weight:700;font-size:14px}.group{margin-bottom:22px}
+input,select,button{font:inherit}input[type=number],select{width:100%;height:48px;border:1px solid var(--border);border-radius:12px;padding:0 14px}
+.row{display:grid;grid-template-columns:1fr 95px;gap:8px}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.quick button,.method label{border:1px solid var(--border);background:#fff;border-radius:10px;padding:10px}
+.quick button:hover{background:var(--light)}
+input[type=range]{width:100%;accent-color:var(--blue);margin-top:10px}
+.method{display:grid;gap:8px}.method label{display:flex;gap:8px;align-items:center;cursor:pointer}
+.calc{width:100%;height:52px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--dark),var(--blue));color:#fff;font-weight:800}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.box{padding:18px;border-radius:14px;background:#f7faff;border:1px solid #dceafb}.box.primary{background:linear-gradient(135deg,var(--dark),var(--blue));color:#fff}
+.box .k{font-size:12px;color:var(--sub)}.box.primary .k{color:#dce8f8}.box .v{font-size:24px;font-weight:800;margin-top:5px}
+.tablewrap{overflow:auto;border:1px solid #e5eaf0;border-radius:12px}table{border-collapse:collapse;width:100%;min-width:700px}th,td{padding:11px;border-bottom:1px solid #eef1f4;text-align:right;font-size:13px}th{background:#f7f9fc}th:first-child,td:first-child{text-align:center}
+.note{font-size:12px;color:var(--sub);margin-top:16px;line-height:1.6}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.summary{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-  <main class="app">
-    <section class="hero">
-      <div class="eyebrow">INTERNAL FAQ</div>
-      <h1>업무 FAQ 검색</h1>
-      <p>등록된 FAQ 데이터 안에서 질문과 답변을 검색할 수 있습니다.</p>
-    </section>
-
-    <section class="panel search-panel">
-      <div class="search-row">
-        <div class="search-box">
-          <input type="search" id="searchInput" placeholder="질문이나 키워드를 입력하세요." autocomplete="off">
-          <span class="search-icon" aria-hidden="true">⌕</span>
+<div class="wrap">
+  <section class="hero">
+    <div class="hero-brand">
+      <div class="mg-logo-wrap">
+        <img
+          class="mg-logo"
+          src="https://www.kfcc.co.kr/static/images/content/cc/img_ci01.jpg"
+          alt="MG새마을금고 공식 심볼마크"
+        />
+      </div>
+      <div>
+        <h1>MG 맞춤형 대출 상환 계산기</h1>
+        <p>예상 상환금액과 월별 상환계획을 간편하게 확인하세요.</p>
+      </div>
+    </div>
+  </section>
+  <div class="grid">
+    <section class="card">
+      <div class="group">
+        <label>대출 금액 (만원)</label>
+        <input id="amount" type="number" value="1000" min="1">
+        <div class="quick">
+          <button data-v="100">100만원</button>
+          <button data-v="500">500만원</button>
+          <button data-v="1000">1,000만원</button>
         </div>
-        <button type="button" class="reset-btn" id="showAllBtn">전체보기</button>
+        <input id="amountRange" type="range" min="100" max="50000" step="100" value="1000">
       </div>
-
-      <div class="filter-wrap">
-        <span class="filter-label">분류</span>
-        <div class="filters">
-          <button type="button" class="filter-btn active" data-category="전체">전체</button>
-          <button type="button" class="filter-btn" data-category="교육">교육</button>
-          <button type="button" class="filter-btn" data-category="문서">문서</button>
-          <button type="button" class="filter-btn" data-category="IT">IT</button>
-          <button type="button" class="filter-btn" data-category="보안">보안</button>
+      <div class="group">
+        <label>대출 기간</label>
+        <div class="row">
+          <input id="period" type="number" value="36" min="1">
+          <select id="unit"><option value="month">개월</option><option value="year">년</option></select>
         </div>
       </div>
-    </section>
-
-    <section class="panel results-panel" aria-live="polite">
-      <div class="results-head">
-        <h2>검색 결과</h2>
-        <div class="count" id="resultCount">총 <strong>0</strong>건</div>
+      <div class="group">
+        <label>연 이자율 (%)</label>
+        <input id="rate" type="number" value="4.5" min="0" step="0.01">
+        <input id="rateRange" type="range" min="0" max="20" step="0.1" value="4.5">
       </div>
-
-      <div class="table-wrap" id="tableWrap">
+      <div class="group">
+        <label>상환 방식</label>
+        <div class="method">
+          <label><input type="radio" name="method" value="equalPayment" checked> 원리금균등분할상환</label>
+          <label><input type="radio" name="method" value="equalPrincipal"> 원금균등분할상환</label>
+          <label><input type="radio" name="method" value="bullet"> 만기일시상환</label>
+        </div>
+      </div>
+      <button id="calc" class="calc">상환금액 계산하기</button>
+    </section>
+    <section class="card">
+      <div class="summary">
+        <div class="box primary"><div class="k">1회차 상환액</div><div class="v" id="first">-</div></div>
+        <div class="box"><div class="k">총 이자</div><div class="v" id="interest">-</div></div>
+        <div class="box"><div class="k">총 상환금액</div><div class="v" id="total">-</div></div>
+      </div>
+      <div class="tablewrap">
         <table>
-          <thead>
-            <tr>
-              <th style="width:34%">질문</th>
-              <th>답변</th>
-              <th style="width:100px">분류</th>
-            </tr>
-          </thead>
-          <tbody id="resultBody"></tbody>
+          <thead><tr><th>회차</th><th>원금</th><th>이자</th><th>월 납입금</th><th>대출 잔액</th></tr></thead>
+          <tbody id="tbody"></tbody>
         </table>
       </div>
-
-      <div class="empty" id="emptyState">
-        <strong>등록된 FAQ에서 답변을 찾을 수 없습니다.</strong>
-        관련 담당부서 또는 공식 안내자료를 확인해 주세요.
-      </div>
-
-      <div class="footnote">
-        ※ 이 화면은 등록된 FAQ만 표시하며, 검색 결과가 없을 경우 새로운 답변을 생성하지 않습니다.
-      </div>
+      <div class="note">※ 본 계산 결과는 예시이며 실제 대출의 이자 계산 방식, 원 단위 처리, 납입일 및 상품 조건에 따라 차이가 발생할 수 있습니다.</div>
     </section>
-  </main>
+  </div>
+</div>
+<script>
+const amount=document.getElementById('amount'), amountRange=document.getElementById('amountRange');
+const period=document.getElementById('period'), unit=document.getElementById('unit');
+const rate=document.getElementById('rate'), rateRange=document.getElementById('rateRange');
+const first=document.getElementById('first'), interest=document.getElementById('interest'), total=document.getElementById('total'), tbody=document.getElementById('tbody');
 
-  <script>
-    const faqData = [
-      { category:"교육", question:"교육 신청은 어디에서 하나요?", answer:"교육 포털의 과정 검색 후 신청 메뉴를 사용합니다." },
-      { category:"교육", question:"신청한 교육을 취소하려면 어떻게 하나요?", answer:"신청내역에서 취소 가능 여부를 확인합니다." },
-      { category:"문서", question:"주간 업무보고에는 무엇을 넣어야 하나요?", answer:"주요 실적, 이슈, 다음 주 계획을 중심으로 작성합니다." },
-      { category:"IT", question:"사내 시스템 접속이 되지 않습니다.", answer:"네트워크, 브라우저, 계정 상태를 순서대로 확인합니다." },
-      { category:"보안", question:"ChatGPT에 내부 업무자료를 넣어도 되나요?", answer:"교육에서는 합성자료를 사용하고, 실제 자료는 조직의 보안 및 AI 사용 기준을 먼저 확인합니다." }
-    ];
+document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{amount.value=b.dataset.v;amountRange.value=b.dataset.v;calc();});
+amountRange.oninput=()=>amount.value=amountRange.value;
+amount.oninput=()=>{if(+amount.value>=100&&+amount.value<=50000)amountRange.value=amount.value;};
+rateRange.oninput=()=>rate.value=rateRange.value;
+rate.oninput=()=>{if(+rate.value>=0&&+rate.value<=20)rateRange.value=rate.value;};
 
-    const searchInput = document.getElementById("searchInput");
-    const resultBody = document.getElementById("resultBody");
-    const resultCount = document.getElementById("resultCount");
-    const tableWrap = document.getElementById("tableWrap");
-    const emptyState = document.getElementById("emptyState");
-    const showAllBtn = document.getElementById("showAllBtn");
-    const filterButtons = [...document.querySelectorAll(".filter-btn")];
+const won=n=>Math.round(n).toLocaleString('ko-KR')+'원';
 
-    let activeCategory = "전체";
+function calc(){
+  const P=+amount.value*10000;
+  const n=unit.value==='year'?+period.value*12:+period.value;
+  const r=(+rate.value/100)/12;
+  const method=document.querySelector('input[name="method"]:checked').value;
+  if(!(P>0&&n>0&&r>=0)) return;
 
-    function escapeHtml(text){
-      return String(text)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+  let bal=P, rows=[], ti=0;
+  if(method==='equalPayment'){
+    const pay=r===0?P/n:P*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);
+    for(let i=1;i<=n;i++){
+      let int=bal*r, prin=pay-int, pm=pay;
+      if(i===n){prin=bal;pm=prin+int;}
+      bal-=prin;if(Math.abs(bal)<1)bal=0;ti+=int;
+      rows.push([i,prin,int,pm,Math.max(0,bal)]);
     }
-
-    function escapeRegExp(text){
-      return text.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  }else if(method==='equalPrincipal'){
+    const fp=P/n;
+    for(let i=1;i<=n;i++){
+      let int=bal*r, prin=i===n?bal:fp, pm=prin+int;
+      bal-=prin;if(Math.abs(bal)<1)bal=0;ti+=int;
+      rows.push([i,prin,int,pm,Math.max(0,bal)]);
     }
-
-    function highlight(text, keyword){
-      const safeText = escapeHtml(text);
-      if(!keyword) return safeText;
-      const safeKeyword = escapeHtml(keyword);
-      const regex = new RegExp("(" + escapeRegExp(safeKeyword) + ")","gi");
-      return safeText.replace(regex,"<mark>$1</mark>");
+  }else{
+    for(let i=1;i<=n;i++){
+      let int=P*r, prin=i===n?P:0, pm=int+prin;
+      bal=i===n?0:P;ti+=int;rows.push([i,prin,int,pm,bal]);
     }
-
-    function getFilteredFaqs(){
-      const keyword = searchInput.value.trim().toLowerCase();
-
-      return faqData.filter(item => {
-        const categoryMatch = activeCategory === "전체" || item.category === activeCategory;
-        const searchable = (item.question + " " + item.answer + " " + item.category).toLowerCase();
-        const keywordMatch = keyword === "" || searchable.includes(keyword);
-        return categoryMatch && keywordMatch;
-      });
-    }
-
-    function render(){
-      const keyword = searchInput.value.trim();
-      const filtered = getFilteredFaqs();
-
-      resultCount.innerHTML = "총 <strong>" + filtered.length + "</strong>건";
-
-      if(filtered.length === 0){
-        resultBody.innerHTML = "";
-        tableWrap.style.display = "none";
-        emptyState.style.display = "block";
-        return;
-      }
-
-      tableWrap.style.display = "block";
-      emptyState.style.display = "none";
-
-      resultBody.innerHTML = filtered.map(item => `
-        <tr>
-          <td class="question">${highlight(item.question, keyword)}</td>
-          <td class="answer">${highlight(item.answer, keyword)}</td>
-          <td><span class="category-badge">${highlight(item.category, keyword)}</span></td>
-        </tr>
-      `).join("");
-    }
-
-    searchInput.addEventListener("input", render);
-
-    filterButtons.forEach(button => {
-      button.addEventListener("click", () => {
-        activeCategory = button.dataset.category;
-        filterButtons.forEach(btn => btn.classList.toggle("active", btn === button));
-        render();
-      });
-    });
-
-    showAllBtn.addEventListener("click", () => {
-      searchInput.value = "";
-      activeCategory = "전체";
-      filterButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.category === "전체"));
-      searchInput.focus();
-      render();
-    });
-
-    render();
-  </script>
+  }
+  first.textContent=won(rows[0][3]);interest.textContent=won(ti);total.textContent=won(P+ti);
+  tbody.innerHTML=rows.map(x=>`<tr><td>${x[0]}회</td><td>${won(x[1])}</td><td>${won(x[2])}</td><td><b>${won(x[3])}</b></td><td>${won(x[4])}</td></tr>`).join('');
+}
+document.getElementById('calc').onclick=calc;
+document.querySelectorAll('input[name="method"]').forEach(x=>x.onchange=calc);
+calc();
+</script>
 </body>
 </html>
