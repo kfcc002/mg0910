@@ -3,148 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MG 맞춤형 대출 상환 계산기</title>
+<title>사내 업무지원</title>
 <style>
-:root{--blue:#1458a6;--dark:#0b3f7d;--light:#eaf3ff;--bg:#f4f7fb;--text:#172033;--sub:#667085;--border:#d9e2ec}
-*{box-sizing:border-box}body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:var(--bg);color:var(--text)}
-.wrap{max-width:1180px;margin:0 auto;padding:32px 18px 60px}
-.hero{background:linear-gradient(135deg,var(--dark),var(--blue));color:#fff;padding:28px 32px;border-radius:22px;margin-bottom:22px}
-.hero-brand{display:flex;align-items:center;gap:16px}.mg-logo-wrap{width:64px;height:64px;flex:0 0 64px;background:#fff;border-radius:14px;padding:7px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.12)}.mg-logo{width:100%;height:100%;object-fit:contain;display:block}.hero h1{margin:0 0 8px;font-size:30px}.hero p{margin:0;opacity:.8}
-.grid{display:grid;grid-template-columns:390px 1fr;gap:22px}
-.card{background:#fff;border-radius:18px;padding:24px;border:1px solid #edf1f5;box-shadow:0 12px 30px rgba(16,45,82,.08)}
-label{font-weight:700;font-size:14px}.group{margin-bottom:22px}
-input,select,button{font:inherit}input[type=number],select{width:100%;height:48px;border:1px solid var(--border);border-radius:12px;padding:0 14px}
-.row{display:grid;grid-template-columns:1fr 95px;gap:8px}
-.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
-.quick button,.method label{border:1px solid var(--border);background:#fff;border-radius:10px;padding:10px}
-.quick button:hover{background:var(--light)}
-input[type=range]{width:100%;accent-color:var(--blue);margin-top:10px}
-.method{display:grid;gap:8px}.method label{display:flex;gap:8px;align-items:center;cursor:pointer}
-.calc{width:100%;height:52px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--dark),var(--blue));color:#fff;font-weight:800}
-.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
-.box{padding:18px;border-radius:14px;background:#f7faff;border:1px solid #dceafb}.box.primary{background:linear-gradient(135deg,var(--dark),var(--blue));color:#fff}
-.box .k{font-size:12px;color:var(--sub)}.box.primary .k{color:#dce8f8}.box .v{font-size:24px;font-weight:800;margin-top:5px}
-.tablewrap{overflow:auto;border:1px solid #e5eaf0;border-radius:12px}table{border-collapse:collapse;width:100%;min-width:700px}th,td{padding:11px;border-bottom:1px solid #eef1f4;text-align:right;font-size:13px}th{background:#f7f9fc}th:first-child,td:first-child{text-align:center}
-.note{font-size:12px;color:var(--sub);margin-top:16px;line-height:1.6}
-@media(max-width:900px){.grid{grid-template-columns:1fr}.summary{grid-template-columns:1fr}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:#f5f7fb;color:#172033}
+.page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 18px}
+.card{width:min(720px,100%);background:#fff;border:1px solid #e7ecf2;border-radius:24px;padding:42px;box-shadow:0 16px 40px rgba(30,60,100,.1)}
+.badge{display:inline-block;padding:6px 11px;border-radius:999px;background:#edf5ff;color:#16497f;font-size:12px;font-weight:800}
+h1{margin:16px 0 10px;font-size:clamp(30px,5vw,46px);letter-spacing:-.04em}
+p{color:#667085;line-height:1.7}
+.actions{margin-top:28px;padding-top:24px;border-top:1px solid #e4e9f0}
+.faq-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-width:270px;min-height:60px;padding:16px 24px;border-radius:16px;background:linear-gradient(135deg,#16497f,#1f5fa8);color:#fff;text-decoration:none;font-size:17px;font-weight:800;box-shadow:0 10px 24px rgba(31,95,168,.22);transition:.2s}
+.faq-btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(31,95,168,.28)}
+.faq-btn:focus-visible{outline:4px solid rgba(31,95,168,.18);outline-offset:3px}
+.icon{width:26px;height:26px;display:grid;place-items:center;border-radius:8px;background:rgba(255,255,255,.16)}
+@media(max-width:600px){
+  .page{align-items:flex-start;padding:18px 12px}
+  .card{padding:28px 20px;border-radius:18px}
+  .faq-btn{width:100%;min-width:0;font-size:16px}
+  .actions{margin-top:22px;padding-top:20px}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <section class="hero">
-    <div class="hero-brand">
-      <div class="mg-logo-wrap">
-        <img
-          class="mg-logo"
-          src="https://www.kfcc.co.kr/static/images/content/cc/img_ci01.jpg"
-          alt="MG새마을금고 공식 심볼마크"
-        />
-      </div>
-      <div>
-        <h1>MG 맞춤형 대출 상환 계산기</h1>
-        <p>예상 상환금액과 월별 상환계획을 간편하게 확인하세요.</p>
-      </div>
-    </div>
-  </section>
-  <div class="grid">
-    <section class="card">
-      <div class="group">
-        <label>대출 금액 (만원)</label>
-        <input id="amount" type="number" value="1000" min="1">
-        <div class="quick">
-          <button data-v="100">100만원</button>
-          <button data-v="500">500만원</button>
-          <button data-v="1000">1,000만원</button>
-        </div>
-        <input id="amountRange" type="range" min="100" max="50000" step="100" value="1000">
-      </div>
-      <div class="group">
-        <label>대출 기간</label>
-        <div class="row">
-          <input id="period" type="number" value="36" min="1">
-          <select id="unit"><option value="month">개월</option><option value="year">년</option></select>
-        </div>
-      </div>
-      <div class="group">
-        <label>연 이자율 (%)</label>
-        <input id="rate" type="number" value="4.5" min="0" step="0.01">
-        <input id="rateRange" type="range" min="0" max="20" step="0.1" value="4.5">
-      </div>
-      <div class="group">
-        <label>상환 방식</label>
-        <div class="method">
-          <label><input type="radio" name="method" value="equalPayment" checked> 원리금균등분할상환</label>
-          <label><input type="radio" name="method" value="equalPrincipal"> 원금균등분할상환</label>
-          <label><input type="radio" name="method" value="bullet"> 만기일시상환</label>
-        </div>
-      </div>
-      <button id="calc" class="calc">상환금액 계산하기</button>
-    </section>
-    <section class="card">
-      <div class="summary">
-        <div class="box primary"><div class="k">1회차 상환액</div><div class="v" id="first">-</div></div>
-        <div class="box"><div class="k">총 이자</div><div class="v" id="interest">-</div></div>
-        <div class="box"><div class="k">총 상환금액</div><div class="v" id="total">-</div></div>
-      </div>
-      <div class="tablewrap">
-        <table>
-          <thead><tr><th>회차</th><th>원금</th><th>이자</th><th>월 납입금</th><th>대출 잔액</th></tr></thead>
-          <tbody id="tbody"></tbody>
-        </table>
-      </div>
-      <div class="note">※ 본 계산 결과는 예시이며 실제 대출의 이자 계산 방식, 원 단위 처리, 납입일 및 상품 조건에 따라 차이가 발생할 수 있습니다.</div>
-    </section>
-  </div>
+<main class="page">
+<section class="card">
+<span class="badge">업무지원 서비스</span>
+<h1>사내 업무 도우미</h1>
+<p>등록된 FAQ 데이터에서 필요한 업무 질문과 답변을 빠르게 찾아보세요.</p>
+
+<div class="actions">
+<a class="faq-btn" href="./faq.html" aria-label="업무 FAQ 검색 페이지로 이동">
+<span class="icon">?</span>
+업무 FAQ 검색하기
+<span>→</span>
+</a>
 </div>
-<script>
-const amount=document.getElementById('amount'), amountRange=document.getElementById('amountRange');
-const period=document.getElementById('period'), unit=document.getElementById('unit');
-const rate=document.getElementById('rate'), rateRange=document.getElementById('rateRange');
-const first=document.getElementById('first'), interest=document.getElementById('interest'), total=document.getElementById('total'), tbody=document.getElementById('tbody');
-
-document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{amount.value=b.dataset.v;amountRange.value=b.dataset.v;calc();});
-amountRange.oninput=()=>amount.value=amountRange.value;
-amount.oninput=()=>{if(+amount.value>=100&&+amount.value<=50000)amountRange.value=amount.value;};
-rateRange.oninput=()=>rate.value=rateRange.value;
-rate.oninput=()=>{if(+rate.value>=0&&+rate.value<=20)rateRange.value=rate.value;};
-
-const won=n=>Math.round(n).toLocaleString('ko-KR')+'원';
-
-function calc(){
-  const P=+amount.value*10000;
-  const n=unit.value==='year'?+period.value*12:+period.value;
-  const r=(+rate.value/100)/12;
-  const method=document.querySelector('input[name="method"]:checked').value;
-  if(!(P>0&&n>0&&r>=0)) return;
-
-  let bal=P, rows=[], ti=0;
-  if(method==='equalPayment'){
-    const pay=r===0?P/n:P*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);
-    for(let i=1;i<=n;i++){
-      let int=bal*r, prin=pay-int, pm=pay;
-      if(i===n){prin=bal;pm=prin+int;}
-      bal-=prin;if(Math.abs(bal)<1)bal=0;ti+=int;
-      rows.push([i,prin,int,pm,Math.max(0,bal)]);
-    }
-  }else if(method==='equalPrincipal'){
-    const fp=P/n;
-    for(let i=1;i<=n;i++){
-      let int=bal*r, prin=i===n?bal:fp, pm=prin+int;
-      bal-=prin;if(Math.abs(bal)<1)bal=0;ti+=int;
-      rows.push([i,prin,int,pm,Math.max(0,bal)]);
-    }
-  }else{
-    for(let i=1;i<=n;i++){
-      let int=P*r, prin=i===n?P:0, pm=int+prin;
-      bal=i===n?0:P;ti+=int;rows.push([i,prin,int,pm,bal]);
-    }
-  }
-  first.textContent=won(rows[0][3]);interest.textContent=won(ti);total.textContent=won(P+ti);
-  tbody.innerHTML=rows.map(x=>`<tr><td>${x[0]}회</td><td>${won(x[1])}</td><td>${won(x[2])}</td><td><b>${won(x[3])}</b></td><td>${won(x[4])}</td></tr>`).join('');
-}
-document.getElementById('calc').onclick=calc;
-document.querySelectorAll('input[name="method"]').forEach(x=>x.onchange=calc);
-calc();
-</script>
+</section>
+</main>
 </body>
 </html>
