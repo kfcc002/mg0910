@@ -1,45 +1,211 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>사내 업무지원</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;background:#f5f7fb;color:#172033}
-.page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 18px}
-.card{width:min(720px,100%);background:#fff;border:1px solid #e7ecf2;border-radius:24px;padding:42px;box-shadow:0 16px 40px rgba(30,60,100,.1)}
-.badge{display:inline-block;padding:6px 11px;border-radius:999px;background:#edf5ff;color:#16497f;font-size:12px;font-weight:800}
-h1{margin:16px 0 10px;font-size:clamp(30px,5vw,46px);letter-spacing:-.04em}
-p{color:#667085;line-height:1.7}
-.actions{margin-top:28px;padding-top:24px;border-top:1px solid #e4e9f0}
-.faq-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-width:270px;min-height:60px;padding:16px 24px;border-radius:16px;background:linear-gradient(135deg,#16497f,#1f5fa8);color:#fff;text-decoration:none;font-size:17px;font-weight:800;box-shadow:0 10px 24px rgba(31,95,168,.22);transition:.2s}
-.faq-btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(31,95,168,.28)}
-.faq-btn:focus-visible{outline:4px solid rgba(31,95,168,.18);outline-offset:3px}
-.icon{width:26px;height:26px;display:grid;place-items:center;border-radius:8px;background:rgba(255,255,255,.16)}
-@media(max-width:600px){
-  .page{align-items:flex-start;padding:18px 12px}
-  .card{padding:28px 20px;border-radius:18px}
-  .faq-btn{width:100%;min-width:0;font-size:16px}
-  .actions{margin-top:22px;padding-top:20px}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>업무 FAQ 검색</title>
+  <style>
+    :root{
+      --primary:#1f5fa8;--primary-dark:#16497f;--primary-soft:#edf5ff;
+      --bg:#f5f7fb;--card:#fff;--text:#172033;--sub:#667085;
+      --line:#e4e9f0;--highlight:#fff2a8;--warning:#fff8eb;
+      --warning-line:#f1d28b;--shadow:0 12px 32px rgba(30,60,100,.08)
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Pretendard,"Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+    button,input{font:inherit}
+    .app{width:min(1120px,calc(100% - 32px));margin:0 auto;padding:42px 0 64px}
+    .hero{margin-bottom:24px}
+    .eyebrow{display:inline-flex;padding:6px 10px;border-radius:999px;background:var(--primary-soft);color:var(--primary-dark);font-size:12px;font-weight:800;margin-bottom:10px}
+    h1{margin:0;font-size:clamp(28px,4vw,40px);letter-spacing:-.04em}
+    .hero p{margin:8px 0 0;color:var(--sub);font-size:15px}
+    .panel{background:var(--card);border:1px solid #edf0f4;border-radius:18px;box-shadow:var(--shadow)}
+    .search-panel,.results-panel{padding:24px}
+    .search-panel{margin-bottom:20px}
+    .search-row{display:grid;grid-template-columns:1fr auto;gap:10px}
+    .search-box{position:relative}
+    .search-box input{width:100%;height:54px;border:1px solid var(--line);border-radius:14px;padding:0 48px 0 16px;outline:none}
+    .search-box input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(31,95,168,.08)}
+    .search-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--sub);font-size:20px}
+    .reset-btn{height:54px;border:0;border-radius:14px;padding:0 20px;background:var(--primary);color:#fff;font-weight:800;cursor:pointer}
+    .reset-btn:hover{background:var(--primary-dark)}
+    .filter-wrap{margin-top:18px}
+    .filter-label{display:block;margin-bottom:9px;font-size:13px;font-weight:800;color:#475467}
+    .filters{display:flex;flex-wrap:wrap;gap:8px}
+    .filter-btn{border:1px solid var(--line);border-radius:999px;background:#fff;color:#344054;padding:9px 16px;font-weight:700;font-size:14px;cursor:pointer}
+    .filter-btn:hover{background:var(--primary-soft);border-color:#bcd3ee}
+    .filter-btn.active{background:var(--primary);border-color:var(--primary);color:#fff}
+    .results-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}
+    .results-head h2{margin:0;font-size:20px}
+    .count{color:var(--sub);font-size:14px}.count strong{color:var(--primary-dark)}
+    .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+    table{width:100%;min-width:760px;border-collapse:collapse;background:#fff}
+    th,td{padding:16px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+    th{background:#f8fafc;color:#475467;font-size:13px;font-weight:800}
+    td{font-size:14px}tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#fbfdff}
+    .question{font-weight:800;color:#1d2939}.answer{color:#344054}
+    .category-badge{display:inline-flex;padding:5px 10px;border-radius:999px;background:var(--primary-soft);color:var(--primary-dark);font-size:12px;font-weight:800;white-space:nowrap}
+    mark{background:var(--highlight);color:inherit;padding:0 2px;border-radius:3px}
+    .empty{display:none;padding:36px 24px;text-align:center;border:1px solid var(--warning-line);border-radius:14px;background:var(--warning);color:#7a5613}
+    .empty strong{display:block;margin-bottom:6px;font-size:17px;color:#5f4310}
+    .footnote{margin-top:14px;color:var(--sub);font-size:12px}
+    @media(max-width:720px){.app{width:min(100% - 20px,1120px);padding-top:24px}.search-panel,.results-panel{padding:18px}.search-row{grid-template-columns:1fr}.reset-btn{width:100%}.results-head{align-items:flex-start;flex-direction:column}}
+  </style>
 </head>
 <body>
-<main class="page">
-<section class="card">
-<span class="badge">업무지원 서비스</span>
-<h1>사내 업무 도우미</h1>
-<p>등록된 FAQ 데이터에서 필요한 업무 질문과 답변을 빠르게 찾아보세요.</p>
+  <main class="app">
+    <section class="hero">
+      <div class="eyebrow">INTERNAL FAQ</div>
+      <h1>업무 FAQ 검색</h1>
+      <p>등록된 FAQ 데이터 안에서 질문과 답변을 검색할 수 있습니다.</p>
+    </section>
 
-<div class="actions">
-<a class="faq-btn" href="./FAQ.html" aria-label="업무 FAQ 검색 페이지로 이동">
-<span class="icon">?</span>
-업무 FAQ 검색하기
-<span>→</span>
-</a>
-</div>
-</section>
-</main>
+    <section class="panel search-panel">
+      <div class="search-row">
+        <div class="search-box">
+          <input type="search" id="searchInput" placeholder="질문이나 키워드를 입력하세요." autocomplete="off">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+        </div>
+        <button type="button" class="reset-btn" id="showAllBtn">전체보기</button>
+      </div>
+
+      <div class="filter-wrap">
+        <span class="filter-label">분류</span>
+        <div class="filters">
+          <button type="button" class="filter-btn active" data-category="전체">전체</button>
+          <button type="button" class="filter-btn" data-category="교육">교육</button>
+          <button type="button" class="filter-btn" data-category="문서">문서</button>
+          <button type="button" class="filter-btn" data-category="IT">IT</button>
+          <button type="button" class="filter-btn" data-category="보안">보안</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel results-panel" aria-live="polite">
+      <div class="results-head">
+        <h2>검색 결과</h2>
+        <div class="count" id="resultCount">총 <strong>0</strong>건</div>
+      </div>
+
+      <div class="table-wrap" id="tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:34%">질문</th>
+              <th>답변</th>
+              <th style="width:100px">분류</th>
+            </tr>
+          </thead>
+          <tbody id="resultBody"></tbody>
+        </table>
+      </div>
+
+      <div class="empty" id="emptyState">
+        <strong>등록된 FAQ에서 답변을 찾을 수 없습니다.</strong>
+        관련 담당부서 또는 공식 안내자료를 확인해 주세요.
+      </div>
+
+      <div class="footnote">
+        ※ 이 화면은 등록된 FAQ만 표시하며, 검색 결과가 없을 경우 새로운 답변을 생성하지 않습니다.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const faqData = [
+      { category:"교육", question:"교육 신청은 어디에서 하나요?", answer:"교육 포털의 과정 검색 후 신청 메뉴를 사용합니다." },
+      { category:"교육", question:"신청한 교육을 취소하려면 어떻게 하나요?", answer:"신청내역에서 취소 가능 여부를 확인합니다." },
+      { category:"문서", question:"주간 업무보고에는 무엇을 넣어야 하나요?", answer:"주요 실적, 이슈, 다음 주 계획을 중심으로 작성합니다." },
+      { category:"IT", question:"사내 시스템 접속이 되지 않습니다.", answer:"네트워크, 브라우저, 계정 상태를 순서대로 확인합니다." },
+      { category:"보안", question:"ChatGPT에 내부 업무자료를 넣어도 되나요?", answer:"교육에서는 합성자료를 사용하고, 실제 자료는 조직의 보안 및 AI 사용 기준을 먼저 확인합니다." }
+    ];
+
+    const searchInput = document.getElementById("searchInput");
+    const resultBody = document.getElementById("resultBody");
+    const resultCount = document.getElementById("resultCount");
+    const tableWrap = document.getElementById("tableWrap");
+    const emptyState = document.getElementById("emptyState");
+    const showAllBtn = document.getElementById("showAllBtn");
+    const filterButtons = [...document.querySelectorAll(".filter-btn")];
+
+    let activeCategory = "전체";
+
+    function escapeHtml(text){
+      return String(text)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function escapeRegExp(text){
+      return text.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+    }
+
+    function highlight(text, keyword){
+      const safeText = escapeHtml(text);
+      if(!keyword) return safeText;
+      const safeKeyword = escapeHtml(keyword);
+      const regex = new RegExp("(" + escapeRegExp(safeKeyword) + ")","gi");
+      return safeText.replace(regex,"<mark>$1</mark>");
+    }
+
+    function getFilteredFaqs(){
+      const keyword = searchInput.value.trim().toLowerCase();
+
+      return faqData.filter(item => {
+        const categoryMatch = activeCategory === "전체" || item.category === activeCategory;
+        const searchable = (item.question + " " + item.answer + " " + item.category).toLowerCase();
+        const keywordMatch = keyword === "" || searchable.includes(keyword);
+        return categoryMatch && keywordMatch;
+      });
+    }
+
+    function render(){
+      const keyword = searchInput.value.trim();
+      const filtered = getFilteredFaqs();
+
+      resultCount.innerHTML = "총 <strong>" + filtered.length + "</strong>건";
+
+      if(filtered.length === 0){
+        resultBody.innerHTML = "";
+        tableWrap.style.display = "none";
+        emptyState.style.display = "block";
+        return;
+      }
+
+      tableWrap.style.display = "block";
+      emptyState.style.display = "none";
+
+      resultBody.innerHTML = filtered.map(item => `
+        <tr>
+          <td class="question">${highlight(item.question, keyword)}</td>
+          <td class="answer">${highlight(item.answer, keyword)}</td>
+          <td><span class="category-badge">${highlight(item.category, keyword)}</span></td>
+        </tr>
+      `).join("");
+    }
+
+    searchInput.addEventListener("input", render);
+
+    filterButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        activeCategory = button.dataset.category;
+        filterButtons.forEach(btn => btn.classList.toggle("active", btn === button));
+        render();
+      });
+    });
+
+    showAllBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      activeCategory = "전체";
+      filterButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.category === "전체"));
+      searchInput.focus();
+      render();
+    });
+
+    render();
+  </script>
 </body>
 </html>
